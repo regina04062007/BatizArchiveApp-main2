@@ -37,17 +37,17 @@ export default function Perfil() {
         const token = await AsyncStorage.getItem('token');
 
         const responseUsuario = await axios.get('http://192.168.0.9:5000/api/perfil', {
-          headers: { Authorization: token }
+          headers: { Authorization: `Bearer ${token}` }
         });
         setUsuario(responseUsuario.data);
 
         const responseProyectos = await axios.get('http://192.168.0.9:5000/api/proyectos/mios', {
-          headers: { Authorization: token }
+          headers: { Authorization: `Bearer ${token}` }
         });
         setProyectosUsuario(responseProyectos.data);
 
         const responseFavoritos = await axios.get('http://192.168.0.9:5000/api/proyectos/favoritos', {
-          headers: { Authorization: token }
+          headers: { Authorization: `Bearer ${token}` }
         });
         setProyectosFavoritos(responseFavoritos.data);
 
