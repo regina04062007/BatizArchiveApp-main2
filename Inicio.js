@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {View,Text,Image,TouchableOpacity,ScrollView,ActivityIndicator,Alert,KeyboardAvoidingView,TextInput,Platform} from 'react-native';
+import {View, Text, Image, TouchableOpacity, ScrollView, ActivityIndicator,Alert, KeyboardAvoidingView, TextInput, Platform} from 'react-native';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -18,7 +18,6 @@ export default function Inicio() {
   const [especialidadSeleccionada, setEspecialidadSeleccionada] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [resultadosBusqueda, setResultadosBusqueda] = useState([]);
-
   const [paginaActual, setPaginaActual] = useState(1);
   const porPagina = 12;
 
@@ -36,9 +35,10 @@ export default function Inicio() {
     };
     obtenerProyectos();
   }, []);
+
   useEffect(() => {
-  setPaginaActual(1);
-}, [especialidadSeleccionada, searchTerm]);
+    setPaginaActual(1);
+  }, [especialidadSeleccionada, searchTerm]);
 
   useEffect(() => {
     const buscarProyectos = async (texto) => {
@@ -46,9 +46,10 @@ export default function Inicio() {
       try {
         const response = await fetch(`http://192.168.0.9:5000/api/buscador/real-time?query=${encodeURIComponent(texto)}`);
         const data = await response.json();
-        setResultadosBusqueda(data);
+        setResultadosBusqueda(Array.isArray(data) ? data : []);
       } catch (error) {
         console.error('Error al buscar:', error);
+        setResultadosBusqueda([]);
       }
     };
 
@@ -66,6 +67,7 @@ export default function Inicio() {
   const proyectosAMostrar = searchTerm.length > 0 ? resultadosBusqueda : proyectosFiltrados;
 
   const paginar = (datos, pagina) => {
+    if (!Array.isArray(datos)) return [];
     const inicio = (pagina - 1) * porPagina;
     return datos.slice(inicio, inicio + porPagina);
   };
@@ -181,9 +183,8 @@ export default function Inicio() {
           {searchTerm ? `Resultados para "${searchTerm}"` : (especialidadSeleccionada || 'Últimos agregados')}
         </Text>
 
-
         <View style={styles.proyectosContainer}>
-          {proyectosAMostrar.length > 0 ? (
+          {Array.isArray(paginar(proyectosAMostrar, paginaActual)) && paginar(proyectosAMostrar, paginaActual).length > 0 ? (
             paginar(proyectosAMostrar, paginaActual).map((proyecto, index) => (
               <View key={index} style={styles.proyecto}>
                 <Image
@@ -211,5 +212,5 @@ export default function Inicio() {
         {renderPaginas(proyectosAMostrar.length, paginaActual, setPaginaActual)}
       </ScrollView>
     </KeyboardAvoidingView>
-  );
+  );
 }
