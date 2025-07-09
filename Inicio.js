@@ -25,6 +25,7 @@ export default function Inicio() {
     const obtenerProyectos = async () => {
       try {
         const response = await axios.get(`http://192.168.0.9:5000/api/proyectos/todos`);
+        console.log('Respuesta:', response.data);
         setProyectos(response.data);
       } catch (error) {
         console.error('Error al obtener proyectos:', error);
