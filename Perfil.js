@@ -37,17 +37,17 @@ export default function Perfil() {
         const token = await AsyncStorage.getItem('token');
 
         const responseUsuario = await axios.get('http://192.168.0.9:5000/api/perfil', {
-          headers: { Authorization: `Bearer ${token}` }
+          headers: { Authorization: token }
         });
         setUsuario(responseUsuario.data);
 
         const responseProyectos = await axios.get('http://192.168.0.9:5000/api/proyectos/mios', {
-          headers: { Authorization: `Bearer ${token}` }
+          headers: { Authorization: token }
         });
         setProyectosUsuario(responseProyectos.data);
 
         const responseFavoritos = await axios.get('http://192.168.0.9:5000/api/proyectos/favoritos', {
-          headers: { Authorization: `Bearer ${token}` }
+          headers: { Authorization: token }
         });
         setProyectosFavoritos(responseFavoritos.data);
 
@@ -183,6 +183,6 @@ export default function Perfil() {
           <Text style={styles.footerText}>Mis Favoritos</Text>
         </TouchableOpacity>
       </View>
-    </View>
-  );
+    </View>
+  );
 }
